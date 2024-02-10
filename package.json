@@ -1,7 +1,7 @@
 {
-  "name": "edi-devicefingerprint",
-  "version": "1.2.0",
-  "description": "Get device fingerprint for web application",
+  "name": "edi.deviceinfo",
+  "version": "1.0.0",
+  "description": "Get device infomation for web application",
   "main": "deviceInfo.js",
   "scripts": {
     "test": "jest"
