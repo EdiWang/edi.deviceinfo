@@ -1,4 +1,8 @@
 function getCanvasFingerprint() {
+    if (!document) {
+        return Promise.reject('No document found, this can only be run in a browser environment');
+    }
+
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
 
@@ -34,6 +38,10 @@ function hashCanvasData(data) {
 }
 
 function getScreenResolution() {
+    if (!window) {
+        return Promise.reject('No window found, this can only be run in a browser environment');
+    }
+
     return {
         w: screen.width,
         h: screen.height
@@ -44,8 +52,39 @@ function getTimeZone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
+async function getDeviceInfo() {
+    var result = {
+        canvasFingerprint: await getCanvasFingerprint(),
+        screenResolution: getScreenResolution(),
+        timeZone: getTimeZone(),
+        userAgent: navigator.userAgent
+    };
+
+    // Check if the browser supports navigator.userAgentData
+    if (navigator.userAgentData) {
+        try {
+            const uaData = await navigator.userAgentData.getHighEntropyValues([
+                "platform",
+                "platformVersion",
+                "architecture"
+            ]);
+
+            result.platform = uaData.platform;
+            result.platformVersion = uaData.platformVersion;
+            result.architecture = uaData.architecture;
+        } catch (error) {
+            console.error('Error getting user agent data.', error);
+        }
+    } else {
+        console.warn('User-Agent Client Hints API is not supported by this browser.');
+    }
+
+    return result;
+}
+
 module.exports = {
     getCanvasFingerprint: getCanvasFingerprint,
     getScreenResolution: getScreenResolution,
     getTimeZone: getTimeZone,
+    getDeviceInfo: getDeviceInfo
 }

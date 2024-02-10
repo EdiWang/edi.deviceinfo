@@ -11,7 +11,9 @@ npm install edi-devicefingerprint
 ```javascript
 const deviceFingerprint = require('edi-devicefingerprint');
 
-const canvasFingerprint = deviceFingerprint.getCanvasFingerprint();
+const deviceInfo = await deviceFingerprint.getDeviceInfo();
+
+const canvasFingerprint = await deviceFingerprint.getCanvasFingerprint();
 const resolution = deviceFingerprint.getScreenResolution();
 const timeZone = deviceFingerprint.getTimeZone();
 ```
