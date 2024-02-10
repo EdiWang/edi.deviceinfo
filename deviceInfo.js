@@ -1,4 +1,4 @@
-function getCanvasFingerprint() {
+function getCanvasDataUrl() {
     if (!document) {
         return Promise.reject('No document found, this can only be run in a browser environment');
     }
@@ -25,16 +25,11 @@ function getCanvasFingerprint() {
     ctx.fillText('Hello, world!', 4, 17);
 
     var dataURL = canvas.toDataURL();
-    return hashCanvasData(dataURL);
+    return dataURL;
 }
 
-function hashCanvasData(data) {
-    var hashObject = new TextEncoder().encode(data);
-    return crypto.subtle.digest('SHA-256', hashObject).then(function (hashBuffer) {
-        var hashArray = Array.from(new Uint8Array(hashBuffer));
-        var hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        return hashHex;
-    });
+function getCanvasFingerprint() {
+    return hashData(getCanvasDataUrl());
 }
 
 function getScreenResolution() {
@@ -52,6 +47,15 @@ function getTimeZone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
+function hashData(data) {
+    var hashObject = new TextEncoder().encode(data);
+    return crypto.subtle.digest('SHA-256', hashObject).then(function (hashBuffer) {
+        var hashArray = Array.from(new Uint8Array(hashBuffer));
+        var hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    });
+}
+
 async function getDeviceInfo() {
     var result = {
         canvasFingerprint: await getCanvasFingerprint(),
@@ -60,7 +64,8 @@ async function getDeviceInfo() {
         userAgent: navigator.userAgent
     };
 
-    // Check if the browser supports navigator.userAgentData
+    result.screenTotalPixels = result.screenResolution.w * result.screenResolution.h;
+
     if (navigator.userAgentData) {
         try {
             const uaData = await navigator.userAgentData.getHighEntropyValues([
@@ -83,8 +88,20 @@ async function getDeviceInfo() {
 }
 
 module.exports = {
-    getCanvasFingerprint: getCanvasFingerprint,
-    getScreenResolution: getScreenResolution,
-    getTimeZone: getTimeZone,
     getDeviceInfo: getDeviceInfo
 }
+
+// Result example:
+// {
+//     canvasFingerprint: 'a1b2c3d4
+//     screenResolution: {
+//         w: 1920,
+//         h: 1080
+//     },
+//     screenTotalPixels: 2073600,
+//     timeZone: 'America/New_York',
+//     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+//     platform: 'Windows',
+//     platformVersion: '15.0',
+//     architecture: 'x86'
+// }
