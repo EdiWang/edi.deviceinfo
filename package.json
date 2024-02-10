@@ -1,6 +1,6 @@
 {
   "name": "edi.deviceinfo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Get device infomation for web application",
   "main": "deviceInfo.js",
   "scripts": {

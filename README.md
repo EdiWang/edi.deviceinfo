@@ -1,19 +1,31 @@
-# edi-devicefingerprint
+# edi.deviceinfo
 
 ## Installation
 
 ```bash
-npm install edi-devicefingerprint
+npm install edi.deviceinfo
 ```
 
 ## Usage
 
 ```javascript
-const deviceFingerprint = require('edi-devicefingerprint');
+const deviceInfo = require('edi.deviceinfo');
 
-const deviceInfo = await deviceFingerprint.getDeviceInfo();
+const info = await deviceInfo.getDeviceInfo();
 
-const canvasFingerprint = await deviceFingerprint.getCanvasFingerprint();
-const resolution = deviceFingerprint.getScreenResolution();
-const timeZone = deviceFingerprint.getTimeZone();
+// Result example:
+// {
+//     canvasFingerprint: 'a1b2c3d4',
+//     screenResolution: {
+//         w: 1920,
+//         h: 1080
+//     },
+//     screenTotalPixels: 2073600,
+//     timeZone: 'America/New_York',
+//     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
+//     platform: 'Windows',
+//     platformVersion: '15.0',
+//     architecture: 'x86'
+// }
+
 ```
