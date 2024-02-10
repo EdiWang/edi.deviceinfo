@@ -44,11 +44,8 @@ function getTimeZone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
 
-async function getDeviceFingerprint() {
-    var cf = await getCanvasFingerprint();
-    return {
-        canvas: cf,
-        resolution: getScreenResolution(),
-        timezone: getTimeZone()
-    };
+module.exports = {
+    getCanvasFingerprint: getCanvasFingerprint,
+    getScreenResolution: getScreenResolution,
+    getTimeZone: getTimeZone,
 }

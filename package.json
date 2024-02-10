@@ -1,5 +1,5 @@
 {
-  "name": "edi.devicefingerprint",
+  "name": "edi-devicefingerprint",
   "version": "1.0.0",
   "description": "Get device fingerprint for web application",
   "main": "index.js",
